@@ -46,11 +46,15 @@ class FallView :UIScrollView {
     var fallDelegate: FallDelegate?;
     var framsArray:[CGRect]?
     var maxYOfItem:[Float]?
+    var itemsInScreen:[Int:FallItem]?
+    var reuseItems:[FallItem]?
     
     
     //MARK: - override methods
     override init(frame: CGRect) {
         super.init(frame: frame)
+        self.itemsInScreen = [Int:FallItem]();
+        self.reuseItems = [FallItem]();
         self.setupUI();
     }
 
@@ -62,12 +66,32 @@ class FallView :UIScrollView {
         super.layoutSubviews();
         for (var i = 0 ; i < self.framsArray?.count ; i++){
             let frame = self.framsArray?[i];
+            if (self.frameInScreen(frame!)){
+                var  item = self.itemsInScreen![i]
+                if item == nil{
+                    item = self.fallDataSource?.fallView(self, itemForRowAtIndex: i)
+                    item?.frame = frame!
+                    self.itemsInScreen![i] = item
+                }
+            }else{
+                let  item = self.itemsInScreen![i]
+                if item == nil{
+                    self.itemsInScreen?[i] = nil
+                    item?.removeFromSuperview()
+                    self.reuseItems?.append(item!)
+                }
+            }
             let item = self.fallDataSource?.fallView(self, itemForRowAtIndex: i)
             item?.frame = frame!;
             self.addSubview(item!);
         }
         
     }
+    
+    
+    
+    
+    
    //MARK: - public methods
     func reloadData(){
         if let dataSource = fallDataSource{
@@ -140,6 +164,10 @@ class FallView :UIScrollView {
     private func setupUI(){
         self.backgroundColor = UIColor.blueColor();
     }
-    
+    private func frameInScreen(frame: CGRect)-> Bool{
+        let topLimitOfY = self.contentOffset.y
+        let bottomLimitOfY = self.contentOffset.y + screenSize.height;
+        return (CGRectGetMaxY(frame) > topLimitOfY) && (CGRectGetMinY(frame) < bottomLimitOfY)
+    }
     
 }

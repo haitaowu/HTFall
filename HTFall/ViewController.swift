@@ -27,7 +27,7 @@ class ViewController: UIViewController,FallDataSource,FallDelegate{
 
     //MARK:-   fallViewDataSource
      func numbersOfCellInView(fallView: FallView) -> Int {
-        return 10;
+        return 20;
     }
     func fallView(fallView: FallView, itemForRowAtIndex: Int) -> FallItem {
         return FallItem.init();
