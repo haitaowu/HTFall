@@ -21,13 +21,13 @@ enum FallItemMarginType{
 
 @objc protocol FallDataSource{
     func numbersOfCellInView(fallView: FallView) -> Int;
-    func fallView(fallView: FallView, itemForRowAtIndex:Int)-> FallItem;
+    func fallView(fallView: FallView, itemForRowAtIndex index:Int)-> FallItem;
     optional  func numberOfColInFallView(fallView: FallView) -> Int;
     
 }
 
 protocol FallDelegate{
-    func fallView(fallView: FallView,hieghtForItemAtIndex:Int)-> Float;
+    func fallView(fallView: FallView,heightForItemAtIndex index:Int)-> Float;
     func fallView(fallView: FallView,marginForType:FallItemMarginType) -> Float;
 }
 
@@ -123,7 +123,7 @@ class FallView :UIScrollView {
             
             for (var i = 0 ; i < numItmds ; i++){
                 
-                let itemHeight = self.fallDelegate?.fallView(self, hieghtForItemAtIndex: i);
+                let itemHeight = self.fallDelegate?.fallView(self, heightForItemAtIndex: i);
                 //计算出当前所处的列
                 var tmpMaxY = self.maxYOfItem?[0]
                 var currentColIndex = 0

@@ -29,8 +29,8 @@ class ViewController: UIViewController,FallDataSource,FallDelegate{
      func numbersOfCellInView(fallView: FallView) -> Int {
         return 20;
     }
-    func fallView(fallView: FallView, itemForRowAtIndex: Int) -> FallItem {
-        var item = fallView.dequeueReuseCellWithIdentifier("CellIdetifier", index: itemForRowAtIndex)
+    func fallView(fallView: FallView, itemForRowAtIndex index: Int) -> FallItem {
+        var item = fallView.dequeueReuseCellWithIdentifier("CellIdetifier", index: index)
         if (item == nil){
             item = FallItem.init()
             item?.identifier = "CellIdetifier"
@@ -38,9 +38,17 @@ class ViewController: UIViewController,FallDataSource,FallDelegate{
         return item!
     }
     //MARK:-   fallViewDelegate methods 
-    func fallView(fallView: FallView, hieghtForItemAtIndex: Int) -> Float {
-        return Float(50);
+    func fallView(fallView: FallView, heightForItemAtIndex index: Int) -> Float {
+        switch (index % 5){
+        case 0:return Float(110)
+        case 2:return Float(90)
+        case 1:return Float(140)
+        case 3:return Float(80)
+        default: return Float(45);
+        }
     }
+    
+    
     func fallView(fallView: FallView, marginForType: FallItemMarginType) -> Float {
         switch marginForType{
         case .FallItemMarginTop,.FallItemMarginBottom:
