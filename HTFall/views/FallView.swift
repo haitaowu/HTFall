@@ -56,6 +56,7 @@ class FallView :UIScrollView {
         self.itemsInScreen = [Int:FallItem]();
         self.reuseItems = [FallItem]();
         self.setupUI();
+
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -66,24 +67,26 @@ class FallView :UIScrollView {
         super.layoutSubviews();
         for (var i = 0 ; i < self.framsArray?.count ; i++){
             let frame = self.framsArray?[i];
+            var  item = self.itemsInScreen![i]
             if (self.frameInScreen(frame!)){
-                var  item = self.itemsInScreen![i]
+                //frame 在屏幕内
                 if item == nil{
                     item = self.fallDataSource?.fallView(self, itemForRowAtIndex: i)
                     item?.frame = frame!
                     self.itemsInScreen![i] = item
+                    self.addSubview(item!);
                 }
             }else{
-                let  item = self.itemsInScreen![i]
-                if item == nil{
-                    self.itemsInScreen?[i] = nil
-                    item?.removeFromSuperview()
+                //frame 不在屏幕内
+                if item != nil{
                     self.reuseItems?.append(item!)
+                    item?.removeFromSuperview()
+                    self.itemsInScreen?[i] = nil
                 }
             }
-            let item = self.fallDataSource?.fallView(self, itemForRowAtIndex: i)
+//             item = self.fallDataSource?.fallView(self, itemForRowAtIndex: i)
             item?.frame = frame!;
-            self.addSubview(item!);
+//            self.addSubview(item!);
         }
         
     }
@@ -158,6 +161,25 @@ class FallView :UIScrollView {
         }else{
             self.contentSize = CGSizeMake(320, CGFloat(568));
         }
+    }
+    
+     func dequeueReuseCellWithIdentifier(identifier: String,index: Int)-> FallItem?{
+        if let itemsArray = self.reuseItems{
+            var count = 0
+            for(var i = 0 ; i < itemsArray.count; i++){
+                let item = itemsArray[i] as FallItem
+                if item.identifier == identifier{
+                    self.reuseItems?.removeAtIndex(i);
+                    return item
+                }
+                count++
+            }
+            
+            if (count == (itemsArray.count-1)){
+                return nil
+            }
+        }
+        return nil
     }
     
    //MARK: - private methods

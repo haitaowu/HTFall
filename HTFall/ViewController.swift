@@ -30,7 +30,12 @@ class ViewController: UIViewController,FallDataSource,FallDelegate{
         return 20;
     }
     func fallView(fallView: FallView, itemForRowAtIndex: Int) -> FallItem {
-        return FallItem.init();
+        var item = fallView.dequeueReuseCellWithIdentifier("CellIdetifier", index: itemForRowAtIndex)
+        if (item == nil){
+            item = FallItem.init()
+            item?.identifier = "CellIdetifier"
+        }
+        return item!
     }
     //MARK:-   fallViewDelegate methods 
     func fallView(fallView: FallView, hieghtForItemAtIndex: Int) -> Float {
@@ -45,7 +50,7 @@ class ViewController: UIViewController,FallDataSource,FallDelegate{
         case .FallItemMarginBetCols:
             return Float(10)
         case .FallItemMarginBetRows:
-            return Float(5)
+            return Float(15)
         }
     }
 }

@@ -10,10 +10,11 @@ import Foundation
 import UIKit
 
 class FallItem:UIView{
-    
+    var identifier:String?
      init(){
         let frame = CGRectMake(0, 0, 300, 20);
         super.init(frame: frame)
+        print("Hello cell")
         self.backgroundColor = UIColor.redColor();
     }
     override init(frame: CGRect){
