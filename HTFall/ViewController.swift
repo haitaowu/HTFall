@@ -32,9 +32,10 @@ class ViewController: UIViewController,FallDataSource,FallDelegate{
     func fallView(fallView: FallView, itemForRowAtIndex index: Int) -> FallItem {
         var item = fallView.dequeueReuseCellWithIdentifier("CellIdetifier", index: index)
         if (item == nil){
-            item = FallItem.init()
-            item?.identifier = "CellIdetifier"
+//            item = FallItem.init("CellIdetifier")
+            item = FallItem.init(identifier: "CellIdetifier")
         }
+        item?.index = index
         return item!
     }
     //MARK:-   fallViewDelegate methods 
@@ -48,6 +49,9 @@ class ViewController: UIViewController,FallDataSource,FallDelegate{
         }
     }
     
+    func fallView(fallView: FallView, didSelectAtIndex index: Int) {
+        print("did select item at index \(index)")
+    }
     
     func fallView(fallView: FallView, marginForType: FallItemMarginType) -> Float {
         switch marginForType{

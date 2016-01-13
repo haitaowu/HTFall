@@ -18,7 +18,7 @@ enum FallItemMarginType{
     case FallItemMarginBetCols
     case FallItemMarginBetRows
 }
-
+//MARK: - FallDataSource protocol define
 @objc protocol FallDataSource{
     func numbersOfCellInView(fallView: FallView) -> Int;
     func fallView(fallView: FallView, itemForRowAtIndex index:Int)-> FallItem;
@@ -26,8 +26,10 @@ enum FallItemMarginType{
     
 }
 
+//MARK: - FallDelegate protocol define
 protocol FallDelegate{
     func fallView(fallView: FallView,heightForItemAtIndex index:Int)-> Float;
+    func fallView(fallView: FallView,didSelectAtIndex index:Int)
     func fallView(fallView: FallView,marginForType:FallItemMarginType) -> Float;
 }
 
@@ -91,6 +93,16 @@ class FallView :UIScrollView {
         
     }
     
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        if let firstTouch = touches.first {
+            let touchPoint = firstTouch.locationInView(self)
+            for (index,value) in (self.framsArray?.enumerate())!{
+                if CGRectContainsPoint(value, touchPoint){
+                    self.fallDelegate?.fallView(self, didSelectAtIndex: index)
+                }
+            }
+        }
+    }
     
     
     
